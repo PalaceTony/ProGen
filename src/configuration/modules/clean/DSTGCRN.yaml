@@ -1,0 +1,74 @@
+defaults:
+  - _self_
+  - guider
+  - dataset: PEMS08
+
+seed: 42
+use_distributed: True
+hyperopt: False
+hyperopt_trial: 80
+
+agcrn:
+guider_model:
+guider_scale:
+train_sampling: False
+
+num_workers: 0
+
+notes: None
+excel_notes: None
+num_batches_to_process: "inf"
+sampling_num_batches_to_process: 9999999 # 9999999 to run all test batches
+sampling_first_batch: 1
+
+wandb_mode: "run"
+
+test_only: False
+best_model_path: ${log_dir}
+best_model_name: best_model.pth
+wandb_project_name: ${dataset.name}_unet_training
+
+NOW: ${now:%m-%d_%H-%M}
+log_dir: outputs/DSTGCRN/${NOW}
+unique_run_id: ${NOW}
+
+hydra:
+  run:
+    dir: ${log_dir}
+
+# wandb
+wandb_dir: ${log_dir}
+run_name: ${NOW}
+
+early_stop: True
+early_stop_patience: 15
+device: cuda:0
+
+test_saved_data: False
+test_batch_shuffle: False
+save_sampled_batches: False
+already_have_samples: False
+random_sampling: False
+log_to_debug_file: False
+db_path: run_logs.db
+
+#  Data
+val_ratio: 0.2
+test_ratio: 0.2
+
+# Sampling
+sde: "subvpsde"
+sampling:
+  method: "pc"
+  predictor: "reverse_diffusion"
+  corrector: None
+  n_steps_each: 1
+  noise_removal: True
+  probability_flow: False
+  snr: 0.005
+n_samples: 2
+scale1: 0
+scale2: 0
+scale3: 0
+scale4: 0
+scale5: 0

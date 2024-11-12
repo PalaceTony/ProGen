@@ -1,0 +1,71 @@
+name: PEMS07
+adj: data/PEMS07/PEMS07.csv
+data_path: data/PEMS07/PEMS07.npz
+normalizer: std
+column_wise: True
+
+# training
+batch_size: 128
+epochs: 300
+lr_init: 0.003
+
+# model
+dif_model:
+  beta_end: 0.02
+  V: 883
+  model_name: "DiffSTG"
+  is_test: false
+  optimizer: "adam"
+  wd: 0.00001
+  start_epoch: 0
+  AGCRN:
+    num_nodes: 170
+    T_p: 12
+    T_h: 12
+    input_dim: 1
+    output_dim: 1
+    embed_dim: 2
+    rnn_units: 64
+    num_layers: 2
+    cheb_k: 2
+  data:
+    centered: true
+    image_size: ${dataset.dif_model.AGCRN.T_p}
+    num_channels: ${dataset.dif_model.AGCRN.input_dim}
+  stlayer:
+    d_k: 8
+    d_v: 8
+    hidden_size: 64
+    n_heads: 4
+    K: 3
+  model:
+    pos_emb: 32
+    s4_state_dim: 64
+    s4_num_temporal_layers: 2
+    temporal_layer: "gru" # "gru", "s4"
+    shape: 12
+    attn_resolutions: [6]
+    ch_mult: [1, 2]
+    conditional: true
+    dropout: 0.1
+    ema_rate: 0.9999
+    name: ddpm
+    nf: 64
+    nonlinearity: swish
+    normalization: GroupNorm
+    num_res_blocks: 2
+    resamp_with_conv: true
+    # optimizer
+    beta1: 0.9
+    eps: 1.0e-08
+    weight_decay: 0
+    warmup: 30
+    grad_clip: 1.
+    # sde
+    num_scales: 1000
+    beta_min: 0.1
+    beta_max: 20.
+
+neighbors_sum_c: 0.01
+neighbors_sum_c2: 0.0001
+spatial_discount_type: type1

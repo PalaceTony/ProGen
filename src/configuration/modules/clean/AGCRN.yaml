@@ -1,0 +1,49 @@
+defaults:
+  - _self_
+
+use_distributed: True
+
+seed: 12
+lr_init: 0.003
+batch_size: 64
+epochs: 100
+num_batches_to_process: "inf"
+mode: "train"
+real_value: False
+
+early_stop: True
+early_stop_patience: 15
+device: cuda:0
+
+# wandb
+wandb_mode: "run"
+wandb_project_name: "agcrn_training"
+wandb_dir: ${log_dir}
+run_name: ${NOW}
+notes: None
+# dir
+best_model_path: ${log_dir} # "/hpc2hdd/home/mgong081/Projects/diffusion_GNNs_0202/outputs/DSTGCRN/04-05_11-02/"
+best_model_name: best_model.pth
+NOW: ${now:%m-%d_%H-%M}
+log_dir: outputs/DSTGCRN/${NOW}
+hydra:
+  run:
+    dir: ${log_dir}
+
+#  Data
+normalizer: std # None
+column_wise: False
+data_path: "data/raw/pems08.npz"
+val_ratio: 0.2
+test_ratio: 0.2
+num_workers: 30
+
+num_nodes: 170
+T_p: 12
+T_h: 12
+input_dim: 1
+output_dim: 1
+embed_dim: 2
+rnn_units: 64
+num_layers: 2
+cheb_k: 2
